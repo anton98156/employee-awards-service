@@ -29,15 +29,15 @@ public class Award {
 
     @NotBlank(message = "Award name is required")
     @Column(name = "award_name")
-    String awardName;
+    private String awardName;
 
     @Column(name = "received_date")
-    LocalDateTime receivedDate;
+    private LocalDateTime receivedDate;
 
     @Column(name = "award_external_id", unique = true)
     private Long awardExternalId;
 
     @ManyToOne
     @JoinColumn(name = "employee_id")
-    Employee employee;
+    private Employee employee;
 }

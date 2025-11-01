@@ -26,7 +26,7 @@ public class Employee {
 
     @NotBlank(message = "Full name is required")
     @Column(name = "full_name")
-    String fullName;
+    private String fullName;
 
     @Column(name = "employee_external_id", unique = true)
     private Long employeeExternalId;
