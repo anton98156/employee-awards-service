@@ -8,5 +8,10 @@ import java.util.Optional;
 
 @Repository
 public interface AwardRepository extends JpaRepository<Award, Long> {
+    /**
+     * Поиск награды по внешнему идентификатору
+     * @param awardExternalId внешний идентификатор награды
+     * @return награда
+     */
     Optional<Award> findByAwardExternalId(Long awardExternalId);
 }
