@@ -5,8 +5,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -27,7 +29,9 @@ public class FileValidator {
         }
 
         String normalizedFileName = fileName.toLowerCase();
-        if (normalizedFileName.endsWith(".xls")) {
+        if (normalizedFileName.endsWith(".csv")) {
+            validateCsvFile(file);
+        } else if (normalizedFileName.endsWith(".xls")) {
             validateXlsFile(file);
         } else if (normalizedFileName.endsWith(".xlsx")) {
             validateXlsxFile(file);
@@ -36,10 +40,21 @@ public class FileValidator {
         }
     }
 
+    private void validateCsvFile(MultipartFile file) {
+        try (InputStream inputStream = file.getInputStream();
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String firstLine = reader.readLine();
+            if (firstLine == null || firstLine.trim().isEmpty()) {
+                throw new FileParseException("CSV файл не содержит данных");
+            }
+        } catch (IOException e) {
+            throw new FileParseException("Ошибка при проверке CSV файла: " + e.getMessage(), e);
+        }
+    }
+
     private void validateXlsFile(MultipartFile file) {
         try (InputStream inputStream = file.getInputStream()) {
-            // Попытка создать Workbook - если успешно, файл валидный
-            Workbook workbook = WorkbookFactory.create(inputStream);
+            Workbook workbook = WorkbookFactory.create(inputStream); // Если Workbook успешно создается - файл валидный
             workbook.close(); // Закрываем сразу после проверки
         } catch (Exception e) {
             throw new FileParseException("Невалидный xls файл: " + e.getMessage(), e);
@@ -48,8 +63,7 @@ public class FileValidator {
 
     private void validateXlsxFile(MultipartFile file) {
         try (InputStream inputStream = file.getInputStream()) {
-            // Проверка "ZIP signature"
-            if (!isZipFile(inputStream)) {
+            if (!isZipFile(inputStream)) { // Проверка "ZIP signature"
                 throw new FileParseException("Файл не является валидным ZIP архивом (xlsx должен быть ZIP)");
             }
 
