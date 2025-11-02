@@ -7,6 +7,12 @@ spring:
     url: jdbc:h2:mem:employee_awards
     username: sa
     password:
+    driver-class-name: org.h2.Driver
+    hikari:
+      pool-name: HikariPool-EmployeeAwards
+      minimum-idle: 5
+      maximum-pool-size: 10
+      connection-timeout: 30000
   
   # JPA/Hibernate
   jpa:
@@ -45,3 +51,4 @@ logging:
     org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.orm.connections.pooling: WARN
