@@ -1,7 +1,5 @@
 package ru.t2.employeeawards.Model;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
@@ -14,6 +12,7 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
 import jakarta.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -32,7 +31,7 @@ public class Award {
     private String awardName;
 
     @Column(name = "received_date")
-    private LocalDateTime receivedDate;
+    private LocalDate receivedDate;
 
     @Column(name = "award_external_id", unique = true)
     private Long awardExternalId;
@@ -40,4 +39,5 @@ public class Award {
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
+    
 }
