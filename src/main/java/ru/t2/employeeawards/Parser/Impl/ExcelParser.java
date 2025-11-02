@@ -21,6 +21,13 @@ import java.time.DateTimeException;
 public class ExcelParser implements FileParser {
     private static final int FIRST_SHEET_INDEX = 0;
 
+    /**
+     * Парсит Excel файл и возвращает список записей о наградах.
+     *
+     * @param inputStream поток данных Excel файла
+     * @return список записей о наградах
+     * @throws IOException если произошла ошибка при чтении файла
+     */
     @Override
     public List<AwardFileRecord> parse(InputStream inputStream) throws IOException {
         try (Workbook workbook = WorkbookFactory.create(inputStream)) {
