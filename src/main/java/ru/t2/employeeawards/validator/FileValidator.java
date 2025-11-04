@@ -15,8 +15,6 @@ import java.util.zip.ZipInputStream;
 
 @Component
 public class FileValidator {
-    private static final int ZIP_SIGNATURE_LENGTH = 4;
-    private static final byte[] ZIP_SIGNATURE = {0x50, 0x4B, 0x03, 0x04};
 
     /**
      * Проверяет файл в зависимости от его расширения.
@@ -64,46 +62,25 @@ public class FileValidator {
     }
 
     private void validateXlsxFile(MultipartFile file) {
-        try (InputStream inputStream = file.getInputStream()) {
-            if (!isZipFile(inputStream)) { // Проверка "ZIP signature"
-                throw new FileParseException("Файл не является валидным ZIP архивом (xlsx должен быть ZIP)");
+        try (InputStream inputStream = file.getInputStream();
+             ZipInputStream zipInputStream = new ZipInputStream(inputStream)) {
+             // ZipInputStream автоматически проверит ZIP signature при чтении
+            // Проверка структуры Excel внутри ZIP
+            boolean hasXlFolder = false;
+            ZipEntry entry;
+
+            while ((entry = zipInputStream.getNextEntry()) != null) {
+                if (entry.getName().startsWith("xl/")) {
+                    hasXlFolder = true;
+                    break;
+                }
             }
 
-            // Проверка структуры Excel внутри ZIP
-            try (ZipInputStream zipInputStream = new ZipInputStream(file.getInputStream())) {
-                boolean hasXlFolder = false;
-                ZipEntry entry;
-
-                while ((entry = zipInputStream.getNextEntry()) != null) {
-                    if (entry.getName().startsWith("xl/")) {
-                        hasXlFolder = true;
-                        break;
-                    }
-                }
-
-                if (!hasXlFolder) {
-                    throw new FileParseException("Файл не является валидным Excel файлом: отсутствует структура xl/");
-                }
+            if (!hasXlFolder) {
+                throw new FileParseException("Файл не является валидным Excel файлом: отсутствует структура xl/");
             }
         } catch (IOException e) {
             throw new FileParseException("Ошибка при проверке xlsx файла: " + e.getMessage(), e);
         }
-    }
-
-    private boolean isZipFile(InputStream inputStream) throws IOException {
-        byte[] signature = new byte[ZIP_SIGNATURE_LENGTH];
-        int bytesRead = inputStream.read(signature);
-
-        if (bytesRead != ZIP_SIGNATURE_LENGTH) {
-            return false;
-        }
-
-        for (int i = 0; i < ZIP_SIGNATURE_LENGTH; i++) {
-            if (signature[i] != ZIP_SIGNATURE[i]) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
