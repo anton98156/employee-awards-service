@@ -63,35 +63,26 @@ public class FileProcessingService {
 
     private UploadResult processRecords(List<AwardFileRecord> records) {
         int processedRecords = 0;
-        int createdRecords = 0;
-        int updatedRecords = 0;
         int skippedRecords = 0;
         List<String> errors = new ArrayList<>();
         
         for (AwardFileRecord record : records) {
             try {
-                boolean created = processRecord(record);
+                processRecord(record);
                 processedRecords++;
-                if (created) {
-                    createdRecords++;
-                } else {
-                    updatedRecords++;
-                }
             } catch (RuntimeException e) {
                 handleRecordError(record, e, errors);
                 skippedRecords++;
             }
         }
         
-        log.info("Обработка завершена. Обработано: {}, пропущено: {}, создано: {}, обновлено: {}",
-                processedRecords, skippedRecords, createdRecords, updatedRecords);
+        log.info("Обработка завершена. Обработано: {}, пропущено: {}",
+                processedRecords, skippedRecords);
         
         return new UploadResult(
                 records.size(),
                 processedRecords,
                 skippedRecords,
-                updatedRecords,
-                createdRecords,
                 errors
         );
     }
@@ -112,7 +103,7 @@ public class FileProcessingService {
     }
 
     @Transactional
-    protected boolean processRecord(AwardFileRecord record) {
+    protected void processRecord(AwardFileRecord record) {
         Optional<Employee> employeeOpt = employeeRepository.findByEmployeeExternalId(record.getEmployeeExternalId());
         
         if (employeeOpt.isEmpty()) {
@@ -124,12 +115,9 @@ public class FileProcessingService {
         Optional<Award> awardOpt = awardRepository.findByAwardExternalId(record.getAwardExternalId());
         
         Award award = awardOpt.orElse(new Award());
-        boolean created = awardOpt.isEmpty();
         
         mapRecordToAward(award, employee, record);
         awardRepository.save(award);
-        
-        return created;
     }
     
     private void mapRecordToAward(Award award, Employee employee, AwardFileRecord record) {

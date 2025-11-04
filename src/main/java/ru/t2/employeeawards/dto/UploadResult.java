@@ -7,8 +7,6 @@ public record UploadResult(
     int totalRecords,
     int processedRecords,
     int skippedRecords,
-    int updatedRecords,
-    int createdRecords,
     List<String> errors
 ) {
     public UploadResult {
