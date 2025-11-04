@@ -1,10 +1,10 @@
-package ru.t2.employeeawards.Factory;
+package ru.t2.employeeawards.factory;
 
 import org.springframework.stereotype.Component;
-import ru.t2.employeeawards.Exception.FileParseException;
-import ru.t2.employeeawards.Parser.FileParser;
-import ru.t2.employeeawards.Parser.Impl.CsvParser;
-import ru.t2.employeeawards.Parser.Impl.ExcelParser;
+import ru.t2.employeeawards.exception.FileParseException;
+import ru.t2.employeeawards.parser.FileParser;
+import ru.t2.employeeawards.parser.impl.CsvParser;
+import ru.t2.employeeawards.parser.impl.ExcelParser;
 
 import java.util.Map;
 import java.util.function.Supplier;

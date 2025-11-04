@@ -1,4 +1,4 @@
-package ru.t2.employeeawards.Parser;
+package ru.t2.employeeawards.parser;
 
 public enum FileStructure {
     HEADERS_ROW_EXCEL(0),

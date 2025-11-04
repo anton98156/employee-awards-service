@@ -1,4 +1,4 @@
-package ru.t2.employeeawards.DTO;
+package ru.t2.employeeawards.dto;
 
 import java.util.List;
 import java.util.ArrayList;

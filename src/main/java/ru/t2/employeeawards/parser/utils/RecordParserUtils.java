@@ -1,8 +1,8 @@
-package ru.t2.employeeawards.Parser.utils;
+package ru.t2.employeeawards.parser.utils;
 
-import ru.t2.employeeawards.DTO.AwardFileRecord;
-import ru.t2.employeeawards.DTO.AwardFileColumn;
-import ru.t2.employeeawards.Exception.FileParseException;
+import ru.t2.employeeawards.dto.AwardFileRecord;
+import ru.t2.employeeawards.dto.AwardFileColumn;
+import ru.t2.employeeawards.exception.FileParseException;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package ru.t2.employeeawards.DTO;
+package ru.t2.employeeawards.dto;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package ru.t2.employeeawards.Model;
+package ru.t2.employeeawards.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

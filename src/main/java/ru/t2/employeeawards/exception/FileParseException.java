@@ -1,4 +1,4 @@
-package ru.t2.employeeawards.Exception;
+package ru.t2.employeeawards.exception;
 /**
  * Исключение, выбрасываемое при ошибках парсинга файла.
  * 

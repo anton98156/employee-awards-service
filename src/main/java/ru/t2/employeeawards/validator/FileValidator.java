@@ -1,6 +1,6 @@
-package ru.t2.employeeawards.Validator;
+package ru.t2.employeeawards.validator;
 
-import ru.t2.employeeawards.Exception.FileParseException;
+import ru.t2.employeeawards.exception.FileParseException;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;

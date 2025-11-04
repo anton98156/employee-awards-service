@@ -1,21 +1,21 @@
-package ru.t2.employeeawards.Parser.Impl;
+package ru.t2.employeeawards.parser.impl;
 
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.List;
-import ru.t2.employeeawards.DTO.AwardFileRecord;
-import ru.t2.employeeawards.Parser.FileParser;
-import ru.t2.employeeawards.Parser.FileStructure;
+import ru.t2.employeeawards.dto.AwardFileRecord;
+import ru.t2.employeeawards.parser.FileParser;
+import ru.t2.employeeawards.parser.FileStructure;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Row;
 import java.util.ArrayList;
-import ru.t2.employeeawards.DTO.AwardFileColumn;
-import ru.t2.employeeawards.Exception.FileParseException;
+import ru.t2.employeeawards.dto.AwardFileColumn;
+import ru.t2.employeeawards.exception.FileParseException;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Cell;
-import ru.t2.employeeawards.Parser.utils.RecordParserUtils;
+import ru.t2.employeeawards.parser.utils.RecordParserUtils;
 
 public class ExcelParser implements FileParser {
     private static final int FIRST_SHEET_INDEX = 0;

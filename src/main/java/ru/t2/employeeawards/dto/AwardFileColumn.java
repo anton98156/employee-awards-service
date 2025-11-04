@@ -1,4 +1,4 @@
-package ru.t2.employeeawards.DTO;
+package ru.t2.employeeawards.dto;
 
 public enum AwardFileColumn {
     EMPLOYEE_EXTERNAL_ID(0),

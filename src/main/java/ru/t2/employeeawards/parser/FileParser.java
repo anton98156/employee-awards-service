@@ -1,9 +1,9 @@
-package ru.t2.employeeawards.Parser;
+package ru.t2.employeeawards.parser;
 
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.List;
-import ru.t2.employeeawards.DTO.AwardFileRecord;
+import ru.t2.employeeawards.dto.AwardFileRecord;
 
 /**
  * Интерфейс для парсинга файлов с наградами сотрудников.

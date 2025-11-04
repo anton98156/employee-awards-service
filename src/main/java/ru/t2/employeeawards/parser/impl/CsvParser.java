@@ -1,19 +1,19 @@
-package ru.t2.employeeawards.Parser.Impl;
+package ru.t2.employeeawards.parser.impl;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.List;
-import ru.t2.employeeawards.DTO.AwardFileRecord;
-import ru.t2.employeeawards.Parser.FileParser;
+import ru.t2.employeeawards.dto.AwardFileRecord;
+import ru.t2.employeeawards.parser.FileParser;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
-import ru.t2.employeeawards.Exception.FileParseException;
+import ru.t2.employeeawards.exception.FileParseException;
 import java.util.ArrayList;
-import ru.t2.employeeawards.Parser.FileStructure;
+import ru.t2.employeeawards.parser.FileStructure;
 import java.util.Arrays;
-import ru.t2.employeeawards.Parser.utils.RecordParserUtils;
+import ru.t2.employeeawards.parser.utils.RecordParserUtils;
 
 public class CsvParser implements FileParser {
 

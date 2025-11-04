@@ -1,7 +1,7 @@
-package ru.t2.employeeawards.Repository;
+package ru.t2.employeeawards.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.t2.employeeawards.Model.Employee;
+import ru.t2.employeeawards.model.Employee;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
