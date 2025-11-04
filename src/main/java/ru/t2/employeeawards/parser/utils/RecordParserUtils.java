@@ -3,13 +3,11 @@ package ru.t2.employeeawards.parser.utils;
 import ru.t2.employeeawards.dto.AwardFileRecord;
 import ru.t2.employeeawards.dto.AwardFileColumn;
 import ru.t2.employeeawards.exception.FileParseException;
-
+import lombok.experimental.UtilityClass;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
-/**
- * Утилитарный класс для парсинга записей о наградах из файлов.
- */
+@UtilityClass // Утилитарный класс для парсинга записей о наградах из файлов
 public final class RecordParserUtils {
 
     /**
