@@ -1,5 +1,6 @@
 package ru.t2.employeeawards.validator;
 
+import org.springframework.stereotype.Component;
 import ru.t2.employeeawards.exception.FileParseException;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -12,6 +13,7 @@ import java.io.InputStreamReader;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+@Component
 public class FileValidator {
     private static final int ZIP_SIGNATURE_LENGTH = 4;
     private static final byte[] ZIP_SIGNATURE = {0x50, 0x4B, 0x03, 0x04};
