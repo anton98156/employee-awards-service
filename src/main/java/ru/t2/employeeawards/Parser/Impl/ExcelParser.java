@@ -12,11 +12,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Row;
 import java.util.ArrayList;
 import ru.t2.employeeawards.DTO.AwardFileColumn;
-import java.time.LocalDate;
 import ru.t2.employeeawards.Exception.FileParseException;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Cell;
-import java.time.DateTimeException;
+import ru.t2.employeeawards.Parser.utils.RecordParserUtils;
 
 public class ExcelParser implements FileParser {
     private static final int FIRST_SHEET_INDEX = 0;
@@ -26,10 +25,9 @@ public class ExcelParser implements FileParser {
      *
      * @param inputStream поток данных Excel файла
      * @return список записей о наградах
-     * @throws IOException если произошла ошибка при чтении файла
      */
     @Override
-    public List<AwardFileRecord> parse(InputStream inputStream) throws IOException {
+    public List<AwardFileRecord> parse(InputStream inputStream) {
         try (Workbook workbook = WorkbookFactory.create(inputStream)) {
             Sheet sheet = workbook.getSheetAt(FIRST_SHEET_INDEX);
             if (sheet == null) {
@@ -92,19 +90,7 @@ public class ExcelParser implements FileParser {
     }
 
     private AwardFileRecord createRecord(String[] values, Row row) {
-        try {
-            return new AwardFileRecord(
-                Long.parseLong(values[AwardFileColumn.EMPLOYEE_EXTERNAL_ID.getIndex()]),
-                values[AwardFileColumn.EMPLOYEE_FULL_NAME.getIndex()],
-                Long.parseLong(values[AwardFileColumn.AWARD_EXTERNAL_ID.getIndex()]),
-                values[AwardFileColumn.AWARD_NAME.getIndex()],
-                LocalDate.parse(values[AwardFileColumn.RECEIVED_DATE.getIndex()])
-            );
-        } catch (NumberFormatException | DateTimeException | NullPointerException e) {
-            throw new FileParseException(
-                "Ошибка при парсинге данных: " + e.getMessage() + " в строке " + (row.getRowNum() + 1), 
-                e
-            );
-        }
+        String errorContext = "строке " + (row.getRowNum() + 1);
+        return RecordParserUtils.createRecord(values, errorContext);
     }
 }

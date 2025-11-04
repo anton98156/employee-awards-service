@@ -10,12 +10,10 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvValidationException;
 import ru.t2.employeeawards.Exception.FileParseException;
-import java.time.DateTimeException;
 import java.util.ArrayList;
-import java.time.LocalDate;
 import ru.t2.employeeawards.Parser.FileStructure;
-import ru.t2.employeeawards.DTO.AwardFileColumn;
 import java.util.Arrays;
+import ru.t2.employeeawards.Parser.utils.RecordParserUtils;
 
 public class CsvParser implements FileParser {
 
@@ -24,10 +22,9 @@ public class CsvParser implements FileParser {
      *
      * @param inputStream поток данных CSV файла
      * @return список записей о наградах
-     * @throws IOException если произошла ошибка при чтении файла
      */
     @Override
-    public List<AwardFileRecord> parse(InputStream inputStream) throws IOException {
+    public List<AwardFileRecord> parse(InputStream inputStream) {
         List<AwardFileRecord> records = new ArrayList<>();
         
         try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(inputStream))
@@ -53,16 +50,7 @@ public class CsvParser implements FileParser {
     }
 
     private void parseLine(String[] line, List<AwardFileRecord> records) {
-        try {
-            records.add(new AwardFileRecord(
-                Long.parseLong(line[AwardFileColumn.EMPLOYEE_EXTERNAL_ID.getIndex()]),
-                line[AwardFileColumn.EMPLOYEE_FULL_NAME.getIndex()],
-                Long.parseLong(line[AwardFileColumn.AWARD_EXTERNAL_ID.getIndex()]),
-                line[AwardFileColumn.AWARD_NAME.getIndex()],
-                LocalDate.parse(line[AwardFileColumn.RECEIVED_DATE.getIndex()])
-            ));
-        } catch (NumberFormatException | DateTimeException | NullPointerException e) {
-            throw new FileParseException("Ошибка при парсинге данных: " + e.getMessage() + " в строке: " + Arrays.toString(line), e);
-        } 
+        String errorContext = "строке: " + Arrays.toString(line);
+        records.add(RecordParserUtils.createRecord(line, errorContext));
     }
 }
