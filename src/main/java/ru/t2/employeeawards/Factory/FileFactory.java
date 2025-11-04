@@ -1,5 +1,6 @@
 package ru.t2.employeeawards.Factory;
 
+import org.springframework.stereotype.Component;
 import ru.t2.employeeawards.Exception.FileParseException;
 import ru.t2.employeeawards.Parser.FileParser;
 import ru.t2.employeeawards.Parser.Impl.CsvParser;
@@ -8,6 +9,7 @@ import ru.t2.employeeawards.Parser.Impl.ExcelParser;
 import java.util.Map;
 import java.util.function.Supplier;
 
+@Component
 public class FileFactory {
     private static final String EXTENSION_XLSX = ".xlsx";
     private static final String EXTENSION_XLS = ".xls";
