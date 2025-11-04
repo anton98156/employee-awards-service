@@ -31,6 +31,14 @@ public class FileProcessingService {
     private final EmployeeRepository employeeRepository;
     private final AwardRepository awardRepository;
 
+    /**
+     * Обрабатывает загруженный файл: выполняет валидацию, парсинг и сохранение записей о наградах.
+     * 
+     * @param file загруженный файл с информацией о наградах сотрудников
+     * @return результат обработки файла, содержащий статистику по обработанным записям
+     * @throws FileParseException если произошла ошибка при валидации или парсинге файла
+     * @throws IOException если произошла ошибка при чтении файла
+     */
     public UploadResult processFile(MultipartFile file) {
         log.info("Начало обработки файла: {}", file.getOriginalFilename());
         
