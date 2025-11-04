@@ -64,7 +64,7 @@ public class FileValidator {
     private void validateXlsxFile(MultipartFile file) {
         try (InputStream inputStream = file.getInputStream();
              ZipInputStream zipInputStream = new ZipInputStream(inputStream)) {
-             // ZipInputStream автоматически проверит ZIP signature при чтении
+            // ZipInputStream автоматически проверит ZIP signature при чтении
             // Проверка структуры Excel внутри ZIP
             boolean hasXlFolder = false;
             ZipEntry entry;
