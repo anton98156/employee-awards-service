@@ -7,7 +7,10 @@ import lombok.experimental.UtilityClass;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
-@UtilityClass // Утилитарный класс для парсинга записей о наградах из файлов
+/*
+ * Утилитарный класс для парсинга записей о наградах из файлов
+ */
+@UtilityClass
 public final class RecordParserUtils {
 
     /**
