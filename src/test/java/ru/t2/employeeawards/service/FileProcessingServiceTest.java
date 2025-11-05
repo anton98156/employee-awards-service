@@ -127,7 +127,7 @@ class FileProcessingServiceTest {
     }
 
     @Test
-    void processFile_WithValidationError_ShouldThrowException() throws IOException {
+    void processFile_WithValidationError_ShouldThrowException() {
         doThrow(new FileParseException("Файл невалидный")).when(fileValidator).validate(multipartFile);
 
         assertThatThrownBy(() -> fileProcessingService.processFile(multipartFile))
