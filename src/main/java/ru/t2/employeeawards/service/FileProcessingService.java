@@ -2,6 +2,7 @@ package ru.t2.employeeawards.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,13 +32,15 @@ public class FileProcessingService {
     private final EmployeeRepository employeeRepository;
     private final AwardRepository awardRepository;
 
+    @Autowired
+    private FileProcessingService self;
+
     /**
      * Обрабатывает загруженный файл: выполняет валидацию, парсинг и сохранение записей о наградах.
      * 
      * @param file загруженный файл с информацией о наградах сотрудников
      * @return результат обработки файла, содержащий статистику по обработанным записям
      * @throws FileParseException если произошла ошибка при валидации или парсинге файла
-     * @throws IOException если произошла ошибка при чтении файла
      */
     public UploadResult processFile(MultipartFile file) {
         log.info("Начало обработки файла: {}", file.getOriginalFilename());
@@ -68,7 +71,7 @@ public class FileProcessingService {
         
         for (AwardFileRecord record : records) {
             try {
-                processRecord(record);
+                self.processRecord(record);
                 processedRecords++;
             } catch (RuntimeException e) {
                 handleRecordError(record, e, errors);
