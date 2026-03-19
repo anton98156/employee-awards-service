@@ -1,16 +1,16 @@
 # Employee Awards Service
 
-REST API сервис для загрузки и управления наградами сотрудников компании. 
-Поддерживает загрузку файлов Excel (.xls, .xlsx) и CSV с автоматической валидацией и обработкой данных.
+REST API service for uploading and managing company employee awards.
+Supports uploading Excel (.xls, .xlsx) and CSV files with automatic data validation and processing.
 
-## ✨ Возможности
+## ✨ Features
 
-- Загрузка файлов Excel и CSV с наградами сотрудников
-- Валидация данных и проверка наличия сотрудника в БД
-- Обработка записей с информацией об ошибках
-- Транзакционная обработка каждой записи для обеспечения целостности данных
+- Uploading Excel and CSV files with employee awards
+- Data validation and employee existence checks in the database
+- Record processing with detailed error information
+- Transactional processing of each record to ensure data integrity
 
-## 🔖 Технологии
+## 🔖 Technologies
 
 - **Java 21**
 - **Spring Boot 3.5.7** (Spring MVC)
@@ -21,25 +21,25 @@ REST API сервис для загрузки и управления награ
 - **Gradle 8.5+**
 - **JUnit 5**
 
-## 🎯 Быстрый старт
+## 🎯 Quick Start
 
-### Требования
+### Requirements
 - Java 21+
 - Gradle 8.5+
 
-### Установка и запуск
+### Installation and Launch
 
 ```bash
-# Сборка проекта
+# Build the project
 ./gradlew clean build
 
-# Запуск приложения
+# Run the application
 ./gradlew bootRun
 ```
 
-Приложение будет доступно по адресу: `http://localhost:8080`
+The application will be available at: `http://localhost:8080`
 
-### Запуск тестов
+### Running Tests
 
 ```bash
 ./gradlew test
@@ -49,19 +49,19 @@ REST API сервис для загрузки и управления награ
 
 ### POST /api/awards/upload
 
-Загружает и обрабатывает файл с наградами.
+Uploads and processes an awards file.
 
-**Параметры:**
-- `file` (multipart/form-data) - файл формата CSV, XLS или XLSX
+**Parameters:**
+- `file` (multipart/form-data) - file in CSV, XLS, or XLSX format
 
-**Пример запроса:**
+**Request example:**
 
 ```bash
 curl -X POST http://localhost:8080/api/awards/upload \
   -F "file=@awards.csv"
 ```
 
-**Пример ответа:**
+**Response example:**
 
 ```json
 {
@@ -69,86 +69,86 @@ curl -X POST http://localhost:8080/api/awards/upload \
   "processedRecords": 8,
   "skippedRecords": 2,
   "errors": [
-    "Ошибка при обработке записи (employeeId=999, awardId=500): Сотрудник не найден: 999"
+    "Error processing record (employeeId=999, awardId=500): Employee not found: 999"
   ]
 }
 ```
 
-## 📝 Формат файлов
+## 📝 File Format
 
-Файл должен содержать следующие колонки:
+The file must contain the following columns:
 
-1. **ID сотрудника** (число)
-2. **ФИО сотрудника** (текст)
-3. **ID награды** (число)
-4. **Название награды** (текст)
-5. **Дата получения** (ISO-8601: yyyy-MM-dd)
+1. **Employee ID** (number)
+2. **Employee full name** (text)
+3. **Award ID** (number)
+4. **Award name** (text)
+5. **Award date** (ISO-8601: yyyy-MM-dd)
 
-### CSV формат
+### CSV format
 
 ```csv
-ID сотрудника,ФИО сотрудника,ID награды,Название награды,Дата получения
-1247,Иванов Иван Иванович,891,Лучший сотрудник месяца,2025-03-22
+Employee ID,Employee full name,Award ID,Award name,Award date
+1247,Ivanov Ivan Ivanovich,891,Employee of the Month,2025-03-22
 ```
 
-### Excel формат
+### Excel format
 
-Первая строка - заголовки, следующие строки - данные.
+The first row contains headers, and the following rows contain data.
 
-## 🧩 Архитектурные решения
+## 🧩 Architectural Decisions
 
-### Обоснование выбора Spring MVC
+### Rationale for Choosing Spring MVC
 
-Выбран Spring MVC, так как обработка и сохранение данных из файлов выполняется последовательно и не требует асинхронного или реактивного подхода. MVC лучше подходит для работы с блокирующими библиотеками (Apache POI, OpenCSV), проще в реализации, тестировании и отладке, обеспечивая надёжное и предсказуемое поведение сервиса. WebFlux оптимален для высоконагруженных сценариев с множеством одновременных соединений, что не требуется в данном случае.
+Spring MVC was chosen because file data processing and persistence are performed sequentially and do not require an asynchronous or reactive approach. MVC is better suited for blocking libraries (Apache POI, OpenCSV), is simpler to implement, test, and debug, and provides reliable and predictable service behavior. WebFlux is optimal for high-load scenarios with many concurrent connections, which is not required in this case.
 
-### Неоднозначности / сделанные допущения
+### Ambiguities / Assumptions Made
 
-**Обработка записей:**
-- Обработка выполняется с транзакцией на каждую запись отдельно, что позволяет частично сохранять данные даже при ошибках в отдельных записях
-- Если сотрудник не найден в БД, запись пропускается с логированием, но обработка остальных записей продолжается
-- При ошибке в одной записи остальные успешно обработанные записи сохраняются, а информация об ошибках собирается и возвращается в результате загрузки
-- Такой подход обеспечивает максимальную обработку валидных данных из файла и информирует пользователя о проблемных записях
+**Record processing:**
+- Processing is done in a separate transaction for each record, which allows partial data persistence even when some records fail
+- If an employee is not found in the database, the record is skipped with logging, while processing of other records continues
+- If one record fails, other successfully processed records are persisted, and error details are collected and returned in the upload result
+- This approach maximizes processing of valid file data and informs the user about problematic records
 
-**Модели данных:**
-- В моделях используются внутренние системные id, отдельно добавлены поля внешних id
-- Поскольку системные id должны быть уникальными и являются автоинкрементируемыми, а также в ТЗ не уточняется каким образом заполняются id в файлах, нет оснований полагать что id из файлов будут совпадать с внутренними системными id
-- В связи с этим, внешние id вынесены в отдельные поля для избежания потенциальных проблем и ошибок
+**Data models:**
+- Models use internal system IDs, with separate fields added for external IDs
+- Since system IDs must be unique and are auto-incremented, and the requirements do not specify how IDs in files are populated, there is no reason to assume file IDs match internal system IDs
+- Therefore, external IDs are stored in separate fields to avoid potential issues and errors
 
-**Формат даты:**
-- В требованиях не указано, требуется ли хранить время получения награды
-- По смыслу бизнес-задачи ("дата получения награды") достаточно календарной даты без времени
-- Поэтому поле реализовано как LocalDate в формате ISO-8601 (yyyy-MM-dd)
+**Date format:**
+- The requirements do not specify whether award time must be stored
+- Based on business meaning ("award date"), a calendar date without time is sufficient
+- Therefore, the field is implemented as `LocalDate` in ISO-8601 format (`yyyy-MM-dd`)
 
-## 🔄 Конфигурация
+## 🔄 Configuration
 
-Основные настройки в `application.yaml`:
+Main settings in `application.yaml`:
 
-- **Порт**: 8080
-- **База данных**: H2 (in-memory)
-- **Максимальный размер файла**: 20MB
+- **Port**: 8080
+- **Database**: H2 (in-memory)
+- **Maximum file size**: 20MB
 - **H2 Console**: http://localhost:8080/h2-console
   - JDBC URL: `jdbc:h2:mem:employee_awards`
   - Username: `sa`
-  - Password: (пусто)
+  - Password: (empty)
 
-## ✅ Тестирование
+## ✅ Testing
 
-Проект содержит полный набор тестов:
-- Unit-тесты для сервисов, репозиториев и парсеров
-- Интеграционные тесты для контроллеров
+The project includes a full set of tests:
+- Unit tests for services, repositories, and parsers
+- Integration tests for controllers
 
-Отчеты о тестах: `build/reports/tests/test/index.html`
+Test reports: `build/reports/tests/test/index.html`
 
-## 📂 Структура проекта
+## 📂 Project Structure
 
-```
+```text
 src/main/java/ru/t2/employeeawards/
 ├── controller/     # REST API
-├── service/        # Бизнес-логика
-├── repository/     # Доступ к данным
-├── model/          # Модели данных
-├── parser/         # Парсеры файлов
-├── validator/      # Валидация
-├── factory/        # Фабрика файлов
-└── exception/      # Обработка исключений
+├── service/        # Business logic
+├── repository/     # Data access
+├── model/          # Data models
+├── parser/         # File parsers
+├── validator/      # Validation
+├── factory/        # File factory
+└── exception/      # Exception handling
 ```
